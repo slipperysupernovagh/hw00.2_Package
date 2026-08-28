@@ -2,6 +2,6 @@
 Differential subpackage containing differential function
 """
 
-from .differential import diff
+from .discrete import diff
 
 __all__ = ['diff']
