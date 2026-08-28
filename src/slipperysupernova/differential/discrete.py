@@ -1,7 +1,7 @@
 """
 Series module containing functions for mathematical progressions.
 """
-def diff(t_k: array,x: array):
+def diff(t_k,x):
     """
     Calculate the discrete derivative of x.
 
