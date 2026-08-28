@@ -25,8 +25,8 @@ def diff(t_k: array,x: array):
     """
     if(len(t_k) != len(x)):
         raise IndexError("The arrays must be the same length")
-    v(0) = 0
+    v[0] = 0
     for i in range(1, len(x)):
-        v(i) = (x(i) - x(i-1))/(t_k(i) - t_k(i-1))
+        v[i] = (x[i] - x[i-1])/(t_k[i] - t_k[i-1])
     return v
 
