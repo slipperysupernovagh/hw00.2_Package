@@ -32,7 +32,7 @@ def rowswap(a: torch.tensor, sr: int, tr: int):
         raise IndexError("Index out of range for the source index")
     if tr < 0 | tr > len(a):
         raise IndexError("Index out of range for the target index")
-    x = a
+    x = a.detach().clone()
     x[tr] = a[sr]
     x[sr] = a[tr]
     return x
@@ -58,7 +58,7 @@ def rowscale(a: torch.tensor, sr: int, sf):
     """
     if sr < 0 | sr> len(a):
         raise IndexError("Index out of range for the source index")
-    x = a
+    x = a.detach().clone()
     x[sr] = sf*a[sr]
     return x
 
@@ -86,10 +86,11 @@ def rowreplacement(a: torch.tensor, sr: int, tr: int, sf1, sf2):
         raise IndexError("Index out of range for the source index")
     if tr < 0 | tr > len(a):
             raise IndexError("Index out of range for the target index")
-    x = a
+    x = a.detach().clone()
     x = rowscale(x,sr,sf1)
     x = rowscale(x,tr,sf2)
     x[tr] = x[sr] + x[tr]
+    x[sr] = a[sr]
     return x
 
 def rref(a: torch.tensor):
@@ -102,7 +103,7 @@ def rref(a: torch.tensor):
     Returns:
         x (tensor): complete matrix
     """
-    x = a
+    x = a.detach().clone()
     lead = 0
     row_count = len(x)
     col_count = len(x[0])
@@ -122,19 +123,32 @@ def rref(a: torch.tensor):
                     return x
                     
         # Step 2: Swap the current row with the non-zero pivot row
-        rowswap(x,i,r)
+        x = rowswap(x,i,r)
         
         # Step 3: Scale the pivot row so the leading entry becomes 1
         pivot = x[r][lead]
         if pivot != 0:
-            rowscale(x,r,1/pivot)
+            x = rowscale(x,r,1/pivot)
             
         # Step 4: Eliminate all other entries (above and below) in this column
         for i in range(row_count):
             if i != r:
                 multiplier = x[i][lead]
-                rowreplacement(x,r,i,-multiplier,1)
+                x = rowreplacement(x,r,i,-multiplier,1)
                 
         lead += 1
         
     return x
+
+
+if __name__ == '__main__':
+    a = torch.tensor([[1.0,3.0,0.0,0.0,3.0],[1.0,0.0,1.0,0.0,9.0],[0.0,0.0,0.0,1.0,-4.0]])
+    x = rowswap(a,0,1)
+    print(x)
+    x =rowscale(a,0,1/3)
+    print(x)
+    x = rowreplacement(a,0,1,5,-6)
+    print(x)
+    x = rref(a)
+    print(x)
+    print(a)
