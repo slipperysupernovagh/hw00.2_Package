@@ -35,7 +35,9 @@ class LinearRegression:
         self.optimizer = optim.SGD([self.w_1, self.w_0], lr=self.learning_rate)
         
         # Training history
-        self.loss_history = []
+        self.history_w0 = []
+        self.history_w1 = []
+        self.history_loss = []
 
     def forward(self, X: torch.Tensor) -> torch.Tensor:
         """
