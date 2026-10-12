@@ -14,7 +14,7 @@ class LinearRegression:
             max_epochs: Maximum number of training epochs
         """
         self.learning_rate = learning_rate
-        self.max_epochs = epochs
+        self.epochs = epochs
         
         # Model parameters
         self.w_1 = nn.Parameter(torch.randn(1, requires_grad=True))  # slope
