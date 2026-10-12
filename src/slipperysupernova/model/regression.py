@@ -37,7 +37,7 @@ class LinearRegression:
         # Training history
         self.history_w0 = []
         self.history_w1 = []
-        self.history_loss = []
+        self.loss_history = []
 
     def forward(self, X: torch.Tensor) -> torch.Tensor:
         """
@@ -68,7 +68,6 @@ class LinearRegression:
         self.y_test = torch.tensor(y_test, dtype=torch.float32)
         
         # Training loop
-        prev_loss = float('inf')
         
         for epoch in range(self.epochs):
             # Zero gradients
@@ -80,6 +79,7 @@ class LinearRegression:
             # Compute loss
             loss = self.criterion(y_pred, self.y_train)
             
+            
             # Backward pass
             loss.backward()
             
@@ -89,8 +89,9 @@ class LinearRegression:
             # Store loss history
             current_loss = loss.item()
             self.loss_history.append(current_loss)
+            self.history_w0.append(self.w_0.item())
+            self.history_w1.append(self.w_1.item())
             
-            prev_loss = current_loss
         
         #R^2
         with torch.no_grad():
@@ -142,7 +143,7 @@ class LinearRegression:
         axs[0, 0].grid(True)
         
         # 2. Loss progression
-        axs[0, 1].plot(self.history_loss, color='purple')
+        axs[0, 1].plot(self.loss_history, color='purple')
         axs[0, 1].set_title('MSE Loss Progression')
         axs[0, 1].set_xlabel('Epoch')
         axs[0, 1].set_ylabel('Loss')
