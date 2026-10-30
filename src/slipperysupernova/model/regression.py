@@ -177,6 +177,7 @@ class CauchyRegression(nn.Module):
             max_epochs: Maximum number of training epochs
             c: cauchy loss constant
         """
+        super(CauchyRegression, self).__init__()
         self.learning_rate = learning_rate
         self.epochs = epochs
         self.c = c
@@ -204,7 +205,7 @@ class CauchyRegression(nn.Module):
         for epoch in range(self.epochs):
             optimizer.zero_grad()
             y_pred = self.forward(X)
-            loss = self.cauchy_loss(y_pred, y)
+            loss = self.cauchyLoss(y_pred, y)
             loss.backward()
             optimizer.step()
             
