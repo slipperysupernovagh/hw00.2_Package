@@ -1,6 +1,7 @@
 """
 Linear regression Subpackage
 """
-from .regression import LinearRegression
+from .regression import LinearRegression, CauchyRegression
+from .logit import LogisticRegression
 
-__all__ = ['LinearRegression']
+__all__ = ['LinearRegression','CauchyRegression','LogisticRegression']

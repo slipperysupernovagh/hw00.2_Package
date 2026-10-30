@@ -165,3 +165,58 @@ class LinearRegression:
         
         plt.tight_layout()
         plt.show()
+
+
+class CauchyRegression(nn.module):
+    def __init__(self, input_dim, learning_rate: float = 0.01, epochs: int = 1000, c: float = 1.0):
+        """
+        Initialize the Cauchy Regression model.
+        
+        Args:
+            learning_rate: Learning rate for gradient descent
+            max_epochs: Maximum number of training epochs
+            c: cauchy loss constant
+        """
+        self.learning_rate = learning_rate
+        self.epochs = epochs
+        self.c = c
+
+        # Loss function and optimizer
+        self.linear = nn.Linear(input_dim, 1)
+        
+
+    def cauchyLoss(self,Y_pred, Y_true ):
+        return torch.mean(((self.c**2)/2.0)*torch.log(1+((Y_true-Y_pred)/self.c)**2))
+
+    def forward(self, x):
+        return self.linear(x)
+     
+    def fit(self, X, y):
+        # Ensure inputs are tensors
+        if not isinstance(X, torch.Tensor):
+            X = torch.tensor(X, dtype=torch.float32)
+        if not isinstance(y, torch.Tensor):
+            y = torch.tensor(y, dtype=torch.float32).view(-1, 1)
+            
+        optimizer = optim.Adam(self.parameters(), lr=self.learning_rate)
+        
+        history = []
+        for epoch in range(self.epochs):
+            optimizer.zero_grad()
+            y_pred = self.forward(X)
+            loss = self.cauchy_loss(y_pred, y)
+            loss.backward()
+            optimizer.step()
+            
+            history.append(loss.item())
+            if (epoch + 1) % (self.epochs // 5) == 0:
+                print(f"Epoch [{epoch+1}/{self.epochs}], Loss: {loss.item():.4f}")
+                
+        return history
+
+    def get_coefficients(self):
+        w0 = self.linear.bias.item()
+        w = self.linear.weight.detach().numpy().flatten()
+        return w0, w
+
+   
