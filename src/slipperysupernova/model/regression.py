@@ -167,7 +167,7 @@ class LinearRegression:
         plt.show()
 
 
-class CauchyRegression(nn.module):
+class CauchyRegression(nn.Module):
     def __init__(self, input_dim, learning_rate: float = 0.01, epochs: int = 1000, c: float = 1.0):
         """
         Initialize the Cauchy Regression model.

@@ -1,6 +1,6 @@
 [project]
 name = "slipperysupernova"
-version = "0.4.0"
+version = "0.4.1"
 description = "Add your description here"
 readme = "README.md"
 authors = [
@@ -17,6 +17,9 @@ dependencies = [
 module-name = "slipperysupernova._core"
 python-packages = ["slipperysupernova"]
 python-source = "src"
+exclude = [
+    "pythonNotebooks/**"
+]
 
 [tool.uv]
 cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.rs" }, { file = "Cargo.toml" }, { file = "Cargo.lock" }]
